@@ -209,7 +209,9 @@ type Config struct {
 	}
 	// ---------- 好友 ----------
 	Friend struct {
-		AddedTipsText string // 成为好友系统提示消息
+		AddedTipsText           string // 成为好友系统提示消息
+		GlobalDisableAddFriend  bool   // 全局禁止添加好友
+		GlobalWhitelistEnabled  bool   // 全局白名单是否启用（仅在全局禁止时生效）
 	}
 	// ---------- 消息搜索 ----------
 	ZincSearch struct {
@@ -456,9 +458,13 @@ func New() *Config {
 		// ---------- 好友设置  --------
 
 		Friend: struct {
-			AddedTipsText string
+			AddedTipsText           string
+			GlobalDisableAddFriend  bool
+			GlobalWhitelistEnabled  bool
 		}{
-			AddedTipsText: "我们已经是好友了，可以愉快的聊天了！",
+			AddedTipsText:           "我们已经是好友了，可以愉快的聊天了！",
+			GlobalDisableAddFriend:  false,
+			GlobalWhitelistEnabled:  true,
 		},
 		// ---------- 群设置  ----------
 		Group: struct {
@@ -700,6 +706,8 @@ func (c *Config) ConfigureWithViper(vp *viper.Viper) {
 	c.Organization.ImportOn = c.getBool("organization.importOn", c.Organization.ImportOn)
 	//#################### 好友 ###############
 	c.Friend.AddedTipsText = c.getString("friend.addedTipsText", c.Friend.AddedTipsText)
+	c.Friend.GlobalDisableAddFriend = c.getBool("friend.globalDisableAddFriend", c.Friend.GlobalDisableAddFriend)
+	c.Friend.GlobalWhitelistEnabled = c.getBool("friend.globalWhitelistEnabled", c.Friend.GlobalWhitelistEnabled)
 	//#################### ZincSearch ####################
 	c.ZincSearch.SearchOn = c.getBool("zincSearch.searchOn", c.ZincSearch.SearchOn)
 	c.ZincSearch.APIURL = c.getString("zincSearch.apiURL", c.ZincSearch.APIURL)
