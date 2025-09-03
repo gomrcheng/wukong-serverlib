@@ -86,6 +86,11 @@ const (
 	HotlineSolved   ContentType = 1201 // 已解决
 	HotlineReopen   ContentType = 1202 // 会话被重开
 
+	// RedpacketReceive 红包领取
+	RedpacketReceive ContentType = 1011
+	// TradeSystemNotifyTemplate  交易系统通知（比如：转账退回，红包退回）
+	TradeSystemNotifyTemplate ContentType = 1012
+
 	// ---------- 音视频 ----------
 	VideoCallResult ContentType = 9989 // 音视频通话结果
 )
