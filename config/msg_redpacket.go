@@ -106,9 +106,11 @@ func (c *Context) getRecveivePayload(msg MsgRedpacketReceive, content string, ui
 func (c *Context) SendRedpacketReceive(msg MsgRedpacketReceive) error {
 	if msg.ChannelType == common.ChannelTypePerson.Uint8() {
 		return c.sendRedpacketReceiveForPerson(msg)
+	} else if msg.ChannelType == common.ChannelTypeGroup.Uint8() {
+		return c.sendRedpacketReceiveForGroup(msg)
+	} else {
+		return fmt.Errorf("不支持的频道类型: %d", msg.ChannelType)
 	}
-
-	return c.sendRedpacketReceiveForGroup(msg)
 }
 
 // SendRedpacketReceive 发送红包领取消息
