@@ -49,7 +49,8 @@ func (c *Context) sendRedpacketReceiveForGroup(msg MsgRedpacketReceive) error {
 		messageMap := c.getRecveivePayload(msg, `你领取了自己的红包`, msg.Receiver, msg.ReceiverName, []string{msg.Receiver})
 		return c.SendMessage(&MsgSendReq{
 			Header: MsgHeader{
-				RedDot: 1,
+				RedDot:   1,
+				SyncOnce: 1,
 			},
 			// ChannelID:   msg.ChannelID,
 			ChannelID:   "",
@@ -63,7 +64,8 @@ func (c *Context) sendRedpacketReceiveForGroup(msg MsgRedpacketReceive) error {
 		messageMap := c.getRecveivePayload(msg, `你领取了“{0}“的红包`, msg.Creater, msg.CreaterName, []string{msg.Receiver})
 		c.SendMessage(&MsgSendReq{
 			Header: MsgHeader{
-				RedDot: 1,
+				RedDot:   1,
+				SyncOnce: 1,
 			},
 			ChannelID:   "",
 			ChannelType: msg.ChannelType,
@@ -75,7 +77,8 @@ func (c *Context) sendRedpacketReceiveForGroup(msg MsgRedpacketReceive) error {
 		messageMap = c.getRecveivePayload(msg, `“{0}“领取了你的红包`, msg.Receiver, msg.ReceiverName, []string{msg.Creater})
 		return c.SendMessage(&MsgSendReq{
 			Header: MsgHeader{
-				RedDot: 1,
+				RedDot:   1,
+				SyncOnce: 1,
 			},
 			ChannelID:   "",
 			ChannelType: msg.ChannelType,
