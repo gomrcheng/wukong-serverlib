@@ -31,6 +31,10 @@ const (
 	Card ContentType = 7
 	// File 文件
 	File ContentType = 8
+	// RedPacket 红包
+	RedPacket ContentType = 9
+	// Transfer 转账
+	Transfer ContentType = 10
 	// MultipleForward 合并转发
 	MultipleForward ContentType = 11
 	// VectorSticker 矢量表情

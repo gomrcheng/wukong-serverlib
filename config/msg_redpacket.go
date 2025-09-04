@@ -11,7 +11,7 @@ import (
 func (c *Context) sendRedpacketReceiveForPerson(msg MsgRedpacketReceive) error {
 
 	// 对方领取了红包，发送给创建者
-	messageMap := c.getRecveivePayload(msg, `“{0}“领取了“{1}“的红包`, msg.Receiver, msg.ReceiverName, []string{msg.CreaterName, msg.ReceiverName})
+	messageMap := c.getRecveivePayload(msg, `“{0}“领取了“{1}“的红包`, msg.Receiver, msg.ReceiverName, msg.Creater, msg.CreaterName, []string{msg.CreaterName, msg.ReceiverName})
 	err := c.SendMessage(&MsgSendReq{
 		Header: MsgHeader{
 			RedDot: 1,
@@ -74,7 +74,7 @@ func (c *Context) sendRedpacketReceiveForGroup(msg MsgRedpacketReceive) error {
 	// 	return err
 	// }
 
-	messageMap := c.getRecveivePayload(msg, `“{0}“领取了“{1}“的红包`, msg.Receiver, msg.ReceiverName, []string{msg.CreaterName, msg.ReceiverName})
+	messageMap := c.getRecveivePayload(msg, `“{0}“领取了“{1}“的红包`, msg.Receiver, msg.ReceiverName, msg.Creater, msg.CreaterName, []string{msg.CreaterName, msg.ReceiverName})
 	return c.SendMessage(&MsgSendReq{
 		Header: MsgHeader{
 			RedDot: 1,
@@ -87,7 +87,7 @@ func (c *Context) sendRedpacketReceiveForGroup(msg MsgRedpacketReceive) error {
 	})
 }
 
-func (c *Context) getRecveivePayload(msg MsgRedpacketReceive, content string, uid string, name string, visibles []string) map[string]interface{} {
+func (c *Context) getRecveivePayload(msg MsgRedpacketReceive, content string, uid string, name string, creater string, createrName string, visibles []string) map[string]interface{} {
 	messageMap := map[string]interface{}{
 		"redpacket_no": msg.RecordNo,
 		"type":         common.RedpacketReceive,
@@ -96,6 +96,10 @@ func (c *Context) getRecveivePayload(msg MsgRedpacketReceive, content string, ui
 			{
 				UID:  uid,
 				Name: name,
+			},
+			{
+				UID:  creater,
+				Name: createrName,
 			},
 		},
 	}
