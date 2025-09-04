@@ -11,7 +11,7 @@ import (
 func (c *Context) sendRedpacketReceiveForPerson(msg MsgRedpacketReceive) error {
 
 	// 对方领取了红包，发送给创建者
-	messageMap := c.getRecveivePayload(msg, `“{0}“领取了你的红包`, msg.Receiver, msg.ReceiverName, []string{msg.Creater})
+	messageMap := c.getRecveivePayload(msg, `“{0}“领取了“{1}“的红包`, msg.Receiver, msg.ReceiverName, []string{msg.Creater})
 	err := c.SendMessage(&MsgSendReq{
 		Header: MsgHeader{
 			RedDot: 1,
@@ -25,20 +25,20 @@ func (c *Context) sendRedpacketReceiveForPerson(msg MsgRedpacketReceive) error {
 		return err
 	}
 
-	// 对方领取了红包，发送给领取者 你领取了xxx的红包
-	messageMap = c.getRecveivePayload(msg, `你领取了“{0}“的红包`, msg.Creater, msg.CreaterName, []string{msg.Receiver})
-	err = c.SendMessage(&MsgSendReq{
-		Header: MsgHeader{
-			RedDot: 1,
-		},
-		ChannelID:   msg.Receiver,
-		ChannelType: common.ChannelTypePerson.Uint8(),
-		FromUID:     msg.Creater,
-		Payload:     []byte(util.ToJson(messageMap)),
-	})
-	if err != nil {
-		return err
-	}
+	// // 对方领取了红包，发送给领取者 你领取了xxx的红包
+	// messageMap = c.getRecveivePayload(msg, `你领取了“{0}“的红包`, msg.Creater, msg.CreaterName, []string{msg.Receiver})
+	// err = c.SendMessage(&MsgSendReq{
+	// 	Header: MsgHeader{
+	// 		RedDot: 1,
+	// 	},
+	// 	ChannelID:   msg.Receiver,
+	// 	ChannelType: common.ChannelTypePerson.Uint8(),
+	// 	FromUID:     msg.Creater,
+	// 	Payload:     []byte(util.ToJson(messageMap)),
+	// })
+	// if err != nil {
+	// 	return err
+	// }
 
 	return nil
 }
@@ -59,22 +59,22 @@ func (c *Context) sendRedpacketReceiveForGroup(msg MsgRedpacketReceive) error {
 		})
 
 	}
-	messageMap := c.getRecveivePayload(msg, `你领取了“{0}“的红包`, msg.Creater, msg.CreaterName, []string{msg.Receiver})
-	err := c.SendMessage(&MsgSendReq{
-		Header: MsgHeader{
-			RedDot: 1,
-		},
-		ChannelID:   msg.ChannelID,
-		ChannelType: msg.ChannelType,
-		// Subscribers: []string{msg.Receiver},
-		Subscribers: []string{},
-		Payload:     []byte(util.ToJson(messageMap)),
-	})
-	if err != nil {
-		return err
-	}
+	// messageMap := c.getRecveivePayload(msg, `你领取了“{0}“的红包`, msg.Creater, msg.CreaterName, []string{msg.Receiver})
+	// err := c.SendMessage(&MsgSendReq{
+	// 	Header: MsgHeader{
+	// 		RedDot: 1,
+	// 	},
+	// 	ChannelID:   msg.ChannelID,
+	// 	ChannelType: msg.ChannelType,
+	// 	// Subscribers: []string{msg.Receiver},
+	// 	Subscribers: []string{},
+	// 	Payload:     []byte(util.ToJson(messageMap)),
+	// })
+	// if err != nil {
+	// 	return err
+	// }
 
-	messageMap = c.getRecveivePayload(msg, `“{0}“领取了你的红包`, msg.Receiver, msg.ReceiverName, []string{msg.Creater})
+	messageMap := c.getRecveivePayload(msg, `“{0}“领取了“{1}“的红包`, msg.Receiver, msg.ReceiverName, []string{msg.Creater})
 	return c.SendMessage(&MsgSendReq{
 		Header: MsgHeader{
 			RedDot: 1,
