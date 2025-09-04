@@ -53,7 +53,8 @@ func (c *Context) sendRedpacketReceiveForGroup(msg MsgRedpacketReceive) error {
 			},
 			ChannelID:   msg.ChannelID,
 			ChannelType: msg.ChannelType,
-			Subscribers: []string{msg.Receiver},
+			// Subscribers: []string{msg.Receiver},
+			Subscribers: []string{},
 			Payload:     []byte(util.ToJson(messageMap)),
 		})
 
@@ -65,7 +66,8 @@ func (c *Context) sendRedpacketReceiveForGroup(msg MsgRedpacketReceive) error {
 		},
 		ChannelID:   msg.ChannelID,
 		ChannelType: msg.ChannelType,
-		Subscribers: []string{msg.Receiver},
+		// Subscribers: []string{msg.Receiver},
+		Subscribers: []string{},
 		Payload:     []byte(util.ToJson(messageMap)),
 	})
 	if err != nil {
@@ -79,7 +81,8 @@ func (c *Context) sendRedpacketReceiveForGroup(msg MsgRedpacketReceive) error {
 		},
 		ChannelID:   msg.ChannelID,
 		ChannelType: msg.ChannelType,
-		Subscribers: []string{msg.Creater},
+		// Subscribers: []string{msg.Creater},
+		Subscribers: []string{},
 		Payload:     []byte(util.ToJson(messageMap)),
 	})
 }
