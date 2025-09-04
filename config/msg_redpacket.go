@@ -11,7 +11,7 @@ import (
 func (c *Context) sendRedpacketReceiveForPerson(msg MsgRedpacketReceive) error {
 
 	// 对方领取了红包，发送给创建者
-	messageMap := c.getRecveivePayload(msg, `“{0}“领取了“{1}“的红包`, msg.Receiver, msg.ReceiverName, []string{msg.Creater})
+	messageMap := c.getRecveivePayload(msg, `“{0}“领取了“{1}“的红包`, msg.Receiver, msg.ReceiverName, []string{msg.CreaterName, msg.ReceiverName})
 	err := c.SendMessage(&MsgSendReq{
 		Header: MsgHeader{
 			RedDot: 1,
@@ -74,7 +74,7 @@ func (c *Context) sendRedpacketReceiveForGroup(msg MsgRedpacketReceive) error {
 	// 	return err
 	// }
 
-	messageMap := c.getRecveivePayload(msg, `“{0}“领取了“{1}“的红包`, msg.Receiver, msg.ReceiverName, []string{msg.Creater})
+	messageMap := c.getRecveivePayload(msg, `“{0}“领取了“{1}“的红包`, msg.Receiver, msg.ReceiverName, []string{msg.CreaterName, msg.ReceiverName})
 	return c.SendMessage(&MsgSendReq{
 		Header: MsgHeader{
 			RedDot: 1,
