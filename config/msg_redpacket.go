@@ -51,40 +51,39 @@ func (c *Context) sendRedpacketReceiveForGroup(msg MsgRedpacketReceive) error {
 			Header: MsgHeader{
 				RedDot: 1,
 			},
-			ChannelID:   msg.ChannelID,
+			// ChannelID:   msg.ChannelID,
+			ChannelID:   "",
 			ChannelType: msg.ChannelType,
-			// Subscribers: []string{msg.Receiver},
-			Subscribers: []string{},
-			Payload:     []byte(util.ToJson(messageMap)),
+			Subscribers: []string{msg.Receiver},
+			// Subscribers: []string{},
+			Payload: []byte(util.ToJson(messageMap)),
 		})
 
-	}
-	messageMap := c.getRecveivePayload(msg, `你领取了“{0}“的红包`, msg.Creater, msg.CreaterName, []string{msg.Receiver})
-	err := c.SendMessage(&MsgSendReq{
-		Header: MsgHeader{
-			RedDot: 1,
-		},
-		ChannelID:   msg.ChannelID,
-		ChannelType: msg.ChannelType,
-		// Subscribers: []string{msg.Receiver},
-		Subscribers: []string{},
-		Payload:     []byte(util.ToJson(messageMap)),
-	})
-	if err != nil {
-		return err
-	}
+	} else {
+		messageMap := c.getRecveivePayload(msg, `你领取了“{0}“的红包`, msg.Creater, msg.CreaterName, []string{msg.Receiver})
+		c.SendMessage(&MsgSendReq{
+			Header: MsgHeader{
+				RedDot: 1,
+			},
+			ChannelID:   "",
+			ChannelType: msg.ChannelType,
+			Subscribers: []string{msg.Receiver},
+			// Subscribers: []string{},
+			Payload: []byte(util.ToJson(messageMap)),
+		})
 
-	messageMap = c.getRecveivePayload(msg, `“{0}“领取了你的红包`, msg.Receiver, msg.ReceiverName, []string{msg.Creater})
-	return c.SendMessage(&MsgSendReq{
-		Header: MsgHeader{
-			RedDot: 1,
-		},
-		ChannelID:   msg.ChannelID,
-		ChannelType: msg.ChannelType,
-		// Subscribers: []string{msg.Creater},
-		Subscribers: []string{},
-		Payload:     []byte(util.ToJson(messageMap)),
-	})
+		messageMap = c.getRecveivePayload(msg, `“{0}“领取了你的红包`, msg.Receiver, msg.ReceiverName, []string{msg.Creater})
+		return c.SendMessage(&MsgSendReq{
+			Header: MsgHeader{
+				RedDot: 1,
+			},
+			ChannelID:   "",
+			ChannelType: msg.ChannelType,
+			Subscribers: []string{msg.Creater},
+			// Subscribers: []string{},
+			Payload: []byte(util.ToJson(messageMap)),
+		})
+	}
 }
 
 func (c *Context) getRecveivePayload(msg MsgRedpacketReceive, content string, uid string, name string, visibles []string) map[string]interface{} {
