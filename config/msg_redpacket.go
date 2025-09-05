@@ -151,8 +151,8 @@ func (c *Context) SendRedpacketReceive(msg MsgRedpacketReceive) error {
 // SendRedpacketRecover 发送红包回收消息
 func (c *Context) SendRedpacketRecover(msg MsgRedpacketRecover) error {
 	return c.SendTradeSystemNotifyTemplate(MsgTradeSystemNotifyTemplate{
-		ChannelID:      msg.Creater,
-		ChannelType:    common.ChannelTypePerson.Uint8(),
+		ChannelID:      msg.ChannelID,
+		ChannelType:    msg.ChannelType,
 		LeftTitle:      "红包退款到账通知",
 		CenterTitle:    fmt.Sprintf("¥%0.2f", util.CentToYuan(msg.Amount)),
 		CenterSubtitle: "退款金额",
@@ -180,7 +180,9 @@ type MsgRedpacketReceive struct {
 
 // MsgRedpacketRecover 红包退款
 type MsgRedpacketRecover struct {
-	Creater   string `json:"creater"`    // 红包创建者
-	Amount    int64  `json:"amount"`     // 退款金额
-	ExpiredAt int64  `json:"expired_at"` // 过期时间
+	Creater     string `json:"creater"`      // 红包创建者
+	Amount      int64  `json:"amount"`       // 退款金额
+	ExpiredAt   int64  `json:"expired_at"`   // 过期时间
+	ChannelID   string `json:"channel_id"`   // 频道ID
+	ChannelType uint8  `json:"channel_type"` // 频道类型
 }
