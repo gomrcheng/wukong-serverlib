@@ -159,10 +159,12 @@ func (c *Context) SendRedpacketRecover(msg MsgRedpacketRecover) error {
 		URLTitle:       "查看详情",
 		Notice:         "红包退款",
 		Attrs: map[string]string{
-			"退款方式": "退回零钱",
-			"退款原因": "红包超过24小时未被领取",
-			"到账时间": util.ToyyyyMMddHHmmss(time.Unix(msg.ExpiredAt, 0)),
-			"备注":   "退款金额已到账",
+			"退款方式":         "退回零钱",
+			"退款原因":         "红包超过24小时未被领取",
+			"到账时间":         util.ToyyyyMMddHHmmss(time.Unix(msg.ExpiredAt, 0)),
+			"备注":           "退款金额已到账",
+			"creater_name": msg.CreaterName,
+			"creater":      msg.Creater,
 		},
 	})
 }
@@ -181,6 +183,7 @@ type MsgRedpacketReceive struct {
 // MsgRedpacketRecover 红包退款
 type MsgRedpacketRecover struct {
 	Creater     string `json:"creater"`      // 红包创建者
+	CreaterName string `json:"create_name"`  // 红包创建者名称
 	Amount      int64  `json:"amount"`       // 退款金额
 	ExpiredAt   int64  `json:"expired_at"`   // 过期时间
 	ChannelID   string `json:"channel_id"`   // 频道ID
