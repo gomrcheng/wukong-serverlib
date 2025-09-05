@@ -25,7 +25,7 @@ func (c *Context) SendTradeSystemNotifyTemplate(msg MsgTradeSystemNotifyTemplate
 			// "type":            common.TradeSystemNotifyTemplate,
 			"attrs":   msg.Attrs,
 			"type":    common.RedpacketReceive,
-			"content": "{0}的红包已过期，金额元已退回，请注意查收。",
+			"content": "{0}的红包24小时未领取，已退回。",
 			"extra": []UserBaseVo{
 				{
 					UID:  msg.Attrs["creater"],
