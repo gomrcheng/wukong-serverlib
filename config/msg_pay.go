@@ -7,32 +7,34 @@ import (
 
 // SendTradeSystemNotifyTemplate 交易通知模版
 func (c *Context) SendTradeSystemNotifyTemplate(msg MsgTradeSystemNotifyTemplate) error {
+	payload := util.ToJson(map[string]interface{}{
+		"left_title":      msg.LeftTitle,
+		"left_subtitle":   msg.LeftSubtitle,
+		"center_title":    msg.CenterTitle,
+		"center_subtitle": msg.CenterSubtitle,
+		"url_title":       msg.URLTitle,
+		"notice":          msg.Notice,
+		"imprest_code":    msg.TradeNo,
+		// "type":            common.TradeSystemNotifyTemplate,
+		"attrs":   msg.Attrs,
+		"type":    common.RedpacketReceive,
+		"content": "{0}的红包24小时未领取，已退回。",
+		"extra": []UserBaseVo{
+			{
+				UID:  msg.Attrs["creater"],
+				Name: msg.Attrs["creater_name"],
+			},
+		},
+	})
 	return c.SendMessage(&MsgSendReq{
 		Header: MsgHeader{
 			RedDot: 1,
 		},
 		ChannelID:   msg.ChannelID,
 		ChannelType: msg.ChannelType,
-		FromUID:     c.cfg.Account.SystemUID,
-		Payload: []byte(util.ToJson(map[string]interface{}{
-			"left_title":      msg.LeftTitle,
-			"left_subtitle":   msg.LeftSubtitle,
-			"center_title":    msg.CenterTitle,
-			"center_subtitle": msg.CenterSubtitle,
-			"url_title":       msg.URLTitle,
-			"notice":          msg.Notice,
-			"imprest_code":    msg.TradeNo,
-			// "type":            common.TradeSystemNotifyTemplate,
-			"attrs":   msg.Attrs,
-			"type":    common.RedpacketReceive,
-			"content": "{0}的红包24小时未领取，已退回。",
-			"extra": []UserBaseVo{
-				{
-					UID:  msg.Attrs["creater"],
-					Name: msg.Attrs["creater_name"],
-				},
-			},
-		})),
+		// FromUID:     c.cfg.Account.SystemUID,
+		FromUID: msg.Attrs["creater"],
+		Payload: []byte(payload),
 	})
 }
 
