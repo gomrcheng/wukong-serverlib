@@ -31,7 +31,8 @@ func (c *Context) SendTransfer(msg MsgTransfer) error {
 // SendTransferRecover 发送转账回收消息
 func (c *Context) SendTransferRecover(msg MsgTransferRecover) error {
 	return c.SendTradeSystemNotifyTemplate(MsgTradeSystemNotifyTemplate{
-		ChannelID:      msg.Creater,
+		ChannelID: msg.Receiver,
+		// ChannelID:      msg.Creater,
 		ChannelType:    common.ChannelTypePerson.Uint8(),
 		LeftTitle:      "转账退款到账通知",
 		CenterTitle:    fmt.Sprintf("¥%0.2f", util.CentToYuan(msg.Amount)),
@@ -39,10 +40,12 @@ func (c *Context) SendTransferRecover(msg MsgTransferRecover) error {
 		URLTitle:       "查看详情",
 		Notice:         "转账退款",
 		Attrs: map[string]string{
-			"退款方式": "退回零钱",
-			"退款原因": "转账超过24小时未被领取",
-			"到账时间": util.ToyyyyMMddHHmmss(time.Unix(msg.ExpiredAt, 0)),
-			"备注":   "退款金额已到账",
+			"退款方式":         "退回零钱",
+			"退款原因":         "转账超过24小时未被领取",
+			"到账时间":         util.ToyyyyMMddHHmmss(time.Unix(msg.ExpiredAt, 0)),
+			"备注":           "退款金额已到账",
+			"creater":      msg.Creater,
+			"creater_name": "",
 		},
 	})
 }
@@ -60,6 +63,7 @@ type MsgTransfer struct {
 // MsgTransferRecover 转账回收
 type MsgTransferRecover struct {
 	Creater   string `json:"uid"`        // 转账创建者
+	Receiver  string `json:"receiver"`   // 接收者
 	Amount    int64  `json:"amount"`     // 退款金额
 	ExpiredAt int64  `json:"expired_at"` // 过期时间
 }
