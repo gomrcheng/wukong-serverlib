@@ -7,6 +7,12 @@ import (
 
 // SendTradeSystemNotifyTemplate 交易通知模版
 func (c *Context) SendTradeSystemNotifyTemplate(msg MsgTradeSystemNotifyTemplate) error {
+	var content string
+	if msg.Notice == "转账退款" {
+		content = "{0}24小时未确认转账，已退回"
+	} else {
+		content = "{0}的红包24小时未领取，已退回。"
+	}
 	payload := util.ToJson(map[string]interface{}{
 		"left_title":      msg.LeftTitle,
 		"left_subtitle":   msg.LeftSubtitle,
@@ -18,7 +24,7 @@ func (c *Context) SendTradeSystemNotifyTemplate(msg MsgTradeSystemNotifyTemplate
 		// "type":            common.TradeSystemNotifyTemplate,
 		"attrs":   msg.Attrs,
 		"type":    common.RedpacketReceive,
-		"content": "{0}的红包24小时未领取，已退回。",
+		"content": content,
 		"extra": []UserBaseVo{
 			{
 				UID:  msg.Attrs["creater"],
