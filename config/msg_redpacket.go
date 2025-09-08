@@ -44,19 +44,19 @@ func (c *Context) sendRedpacketReceiveForPerson(msg MsgRedpacketReceive) error {
 }
 
 func (c *Context) sendRedpacketReceiveForGroup(msg MsgRedpacketReceive) error {
-	// 自己领取了自己的红包
-	messageMap := c.getRecveivePayload(msg, `测试消息1012`, msg.Receiver, msg.ReceiverName, msg.Creater, msg.CreaterName, []string{msg.Receiver})
-	messageMap["type"] = common.TradeSystemNotifyTemplate
-	c.SendMessage(&MsgSendReq{
-		Header: MsgHeader{
-			RedDot: 1,
-		},
-		ChannelID:   msg.ChannelID,
-		ChannelType: msg.ChannelType,
-		// Subscribers: []string{msg.Receiver},
-		Subscribers: []string{},
-		Payload:     []byte(util.ToJson(messageMap)),
-	})
+	// // 自己领取了自己的红包
+	// messageMap := c.getRecveivePayload(msg, `测试消息1012`, msg.Receiver, msg.ReceiverName, msg.Creater, msg.CreaterName, []string{msg.Receiver})
+	// messageMap["type"] = common.TradeSystemNotifyTemplate
+	// c.SendMessage(&MsgSendReq{
+	// 	Header: MsgHeader{
+	// 		RedDot: 1,
+	// 	},
+	// 	ChannelID:   msg.ChannelID,
+	// 	ChannelType: msg.ChannelType,
+	// 	// Subscribers: []string{msg.Receiver},
+	// 	Subscribers: []string{},
+	// 	Payload:     []byte(util.ToJson(messageMap)),
+	// })
 
 	// }
 	// messageMap := c.getRecveivePayload(msg, `你领取了“{0}“的红包`, msg.Creater, msg.CreaterName, []string{msg.Receiver})
@@ -74,7 +74,7 @@ func (c *Context) sendRedpacketReceiveForGroup(msg MsgRedpacketReceive) error {
 	// 	return err
 	// }
 
-	messageMap = c.getRecveivePayload(msg, `“{0}“领取了“{1}“的红包`, msg.Receiver, msg.ReceiverName, msg.Creater, msg.CreaterName, []string{msg.CreaterName, msg.ReceiverName})
+	messageMap := c.getRecveivePayload(msg, `“{0}“领取了“{1}“的红包`, msg.Receiver, msg.ReceiverName, msg.Creater, msg.CreaterName, []string{msg.CreaterName, msg.ReceiverName})
 	return c.SendMessage(&MsgSendReq{
 		Header: MsgHeader{
 			RedDot: 1,
@@ -104,9 +104,9 @@ func (c *Context) getRecveivePayload(msg MsgRedpacketReceive, content string, ui
 			},
 		},
 	}
-	if len(visibles) > 0 {
-		messageMap["visibles"] = visibles
-	}
+	// if len(visibles) > 0 {
+	// 	messageMap["visibles"] = visibles
+	// }
 	return messageMap
 }
 
