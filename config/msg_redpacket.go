@@ -81,6 +81,7 @@ func (c *Context) sendRedpacketReceiveForGroup(msg MsgRedpacketReceive) error {
 		},
 		ChannelID:   msg.ChannelID,
 		ChannelType: msg.ChannelType,
+		FromUID:     msg.Receiver,
 		// Subscribers: []string{msg.Creater},
 		Subscribers: []string{},
 		Payload:     []byte(util.ToJson(messageMap)),
