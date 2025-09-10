@@ -209,9 +209,9 @@ type Config struct {
 	}
 	// ---------- 好友 ----------
 	Friend struct {
-		AddedTipsText           string // 成为好友系统提示消息
-		GlobalDisableAddFriend  bool   // 全局禁止添加好友
-		GlobalWhitelistEnabled  bool   // 全局白名单是否启用（仅在全局禁止时生效）
+		AddedTipsText          string // 成为好友系统提示消息
+		GlobalDisableAddFriend bool   // 全局禁止添加好友
+		GlobalWhitelistEnabled bool   // 全局白名单是否启用（仅在全局禁止时生效）
 	}
 	// ---------- 消息搜索 ----------
 	ZincSearch struct {
@@ -248,6 +248,13 @@ type Config struct {
 		AppID     string // 微信appid 在开放平台内
 		AppSecret string
 	}
+
+	// ---------- udun wallet ----------
+	Udun UdunConfig // Udun钱包配置
+
+	// ---------- payment ----------
+	WxPay  WxPayConfig  // 微信支付配置
+	AliPay AliPayConfig // 支付宝支付配置
 
 	// ---------- tracing ----------
 	Tracing struct {
@@ -458,13 +465,13 @@ func New() *Config {
 		// ---------- 好友设置  --------
 
 		Friend: struct {
-			AddedTipsText           string
-			GlobalDisableAddFriend  bool
-			GlobalWhitelistEnabled  bool
+			AddedTipsText          string
+			GlobalDisableAddFriend bool
+			GlobalWhitelistEnabled bool
 		}{
-			AddedTipsText:           "我们已经是好友了，可以愉快的聊天了！",
-			GlobalDisableAddFriend:  false,
-			GlobalWhitelistEnabled:  true,
+			AddedTipsText:          "我们已经是好友了，可以愉快的聊天了！",
+			GlobalDisableAddFriend: false,
+			GlobalWhitelistEnabled: true,
 		},
 		// ---------- 群设置  ----------
 		Group: struct {
@@ -492,6 +499,30 @@ func New() *Config {
 				Topic:    "com.xinbida.tangsengdaodao",
 				Password: "123456",
 			},
+		},
+
+		// ---------- udun wallet  ----------
+		Udun: UdunConfig{
+			BaseURL:     "https://api.uduncloud.com",
+			MerchantID:  "",
+			SignKey:     "",
+			CallbackURL: "",
+			Timeout:     30,
+		},
+
+		// ---------- payment  ----------
+		WxPay: WxPayConfig{
+			AppID:                   "",
+			MchID:                   "",
+			APIv3Key:                "",
+			CertificateSerialNumber: "",
+			PayPrivateKey:           "",
+		},
+		AliPay: AliPayConfig{
+			AppID:        "",
+			PublicKey:    "",
+			PrivateKey:   "",
+			IsProduction: false,
 		},
 
 		// ---------- support  ----------
@@ -756,6 +787,26 @@ func (c *Config) ConfigureWithViper(vp *viper.Viper) {
 	//#################### weixin ####################
 	c.Wechat.AppID = c.getString("wechat.appID", c.Wechat.AppID)
 	c.Wechat.AppSecret = c.getString("wechat.appSecret", c.Wechat.AppSecret)
+
+	//#################### udun wallet ####################
+	c.Udun.BaseURL = c.getString("udun.baseURL", c.Udun.BaseURL)
+	c.Udun.MerchantID = c.getString("udun.merchantID", c.Udun.MerchantID)
+	c.Udun.SignKey = c.getString("udun.signKey", c.Udun.SignKey)
+	c.Udun.CallbackURL = c.getString("udun.callbackURL", c.Udun.CallbackURL)
+	c.Udun.Timeout = c.getInt("udun.timeout", c.Udun.Timeout)
+
+	//#################### payment ####################
+	// 微信支付
+	c.WxPay.AppID = c.getString("wxpay.appID", c.WxPay.AppID)
+	c.WxPay.MchID = c.getString("wxpay.mchID", c.WxPay.MchID)
+	c.WxPay.APIv3Key = c.getString("wxpay.apiv3Key", c.WxPay.APIv3Key)
+	c.WxPay.CertificateSerialNumber = c.getString("wxpay.certificateSerialNumber", c.WxPay.CertificateSerialNumber)
+	c.WxPay.PayPrivateKey = c.getString("wxpay.payPrivateKey", c.WxPay.PayPrivateKey)
+	// 支付宝支付
+	c.AliPay.AppID = c.getString("alipay.appID", c.AliPay.AppID)
+	c.AliPay.PublicKey = c.getString("alipay.publicKey", c.AliPay.PublicKey)
+	c.AliPay.PrivateKey = c.getString("alipay.privateKey", c.AliPay.PrivateKey)
+	c.AliPay.IsProduction = c.getBool("alipay.isProduction", c.AliPay.IsProduction)
 
 	//#################### tracing ####################
 	c.Tracing.On = c.getBool("tracing.on", c.Tracing.On)
@@ -1089,6 +1140,32 @@ type FIREBASEPush struct {
 	PackageName string
 	JsonPath    string // firebase推送需要的json的路径
 	ProjectId   string // serviceAccountJson中的project_id值
+}
+
+// UdunConfig Udun钱包配置
+type UdunConfig struct {
+	BaseURL     string // API基础URL
+	MerchantID  string // 商户号
+	SignKey     string // 签名密钥
+	CallbackURL string // 回调地址
+	Timeout     int    // 请求超时时间(秒)
+}
+
+// WxPayConfig 微信支付配置
+type WxPayConfig struct {
+	AppID                   string // 微信AppID
+	MchID                   string // 商户号
+	APIv3Key                string // APIv3密钥
+	CertificateSerialNumber string // 证书序列号
+	PayPrivateKey           string // 支付私钥
+}
+
+// AliPayConfig 支付宝支付配置
+type AliPayConfig struct {
+	AppID        string // 支付宝AppID
+	PublicKey    string // 支付宝公钥
+	PrivateKey   string // 应用私钥
+	IsProduction bool   // 是否生产环境
 }
 
 type duration struct {
