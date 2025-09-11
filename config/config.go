@@ -1149,6 +1149,7 @@ type UdunConfig struct {
 	SignKey     string // 签名密钥
 	CallbackURL string // 回调地址
 	Timeout     int    // 请求超时时间(秒)
+	Tips        string // 提示信息
 }
 
 // WxPayConfig 微信支付配置
